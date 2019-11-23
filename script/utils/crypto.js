@@ -9,33 +9,23 @@ function byteArrayToWordArray(ba) {
   return CryptoJS.lib.WordArray.create(wa, ba.length);
 }
 
-function getMD5(file, progressCallback) {
-  return new Promise((resolveWhole, rejectWhole) => {
+function getMD5(file) {
+  return new Promise((resolve, reject) => {
     const md5 = CryptoJS.algo.MD5.create();
-    const queuingStrategy = new CountQueuingStrategy({ highWaterMark: 1 });
-    const total = file.size;
-    let processed = 0;
 
     const writableStream = new WritableStream({
       write(chunk) {
-        return new Promise((resolve, reject) => {
-          md5.update(byteArrayToWordArray(chunk));
-          processed += chunk.length;
-          if (progressCallback) {
-            progressCallback({processed: processed, total: total});
-          }
-          resolve();
-        });
+        md5.update(byteArrayToWordArray(chunk));
       },
       close() {
         const hash = md5.finalize();
         const hashHex = hash.toString(CryptoJS.enc.Hex);
-        resolveWhole(hashHex);
+        resolve(hashHex);
       },
       abort(err) {
-        rejectWhole(err);
+        reject(err);
       }
-    }, queuingStrategy);
+    });
 
     file.stream().pipeTo(writableStream);
   });
