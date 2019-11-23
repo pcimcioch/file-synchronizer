@@ -72,7 +72,7 @@ Vue.component('dir-handler', {
           </span>
         </button>
       </div>
-      <file-info class="col col-6" v-bind:file="selected"></file-info>
+      <file-info class="col col-6" v-bind:file-handle="selected"></file-info>
     </div>
   `
 });
