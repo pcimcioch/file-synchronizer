@@ -1,5 +1,10 @@
 Vue.component('dir-handler-info', {
-  props: ['handler'],
+  props: {
+    handler: {
+      type: Object,
+      required: false
+    }
+  },
   template: `
     <table class="table table-borderless table-sm" v-if="handler">
       <tbody>

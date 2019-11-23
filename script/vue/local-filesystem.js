@@ -22,8 +22,6 @@ Vue.component('local-filesystem', {
   template: `
     <div class="card">
       <div class="card-body">
-    
-        <!-- TODO: max height with scrolling-->
         <dir-handler-list v-bind:handlers="handlers" v-on:add="addHandler" v-on:remove="removeHandler" v-on:open="open" v-if="!opened"></dir-handler-list>
         <dir-handler v-bind:handler="opened" v-on:close="close" v-if="opened"></dir-handler>
       </div>

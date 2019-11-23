@@ -1,5 +1,15 @@
 Vue.component('dir-handler', {
-  props: ['handler'],
+  props: {
+    handler: {
+      type: Object,
+      required: true
+    },
+    maxHeight: {
+      type: String,
+      required: false,
+      default: '150px'
+    }
+  },
   data: function() {
     return {
       selected: null,
@@ -46,7 +56,7 @@ Vue.component('dir-handler', {
   },
   template: `
     <div class="row">
-      <div class="list-group list-group-flush col col-6">
+      <div class="list-group list-group-flush col col-6"  v-bind:style="{'overflow-y': 'scroll', 'max-height': maxHeight}">
         <button class="list-group-item list-group-item-action p-1" title="Back" v-on:click="back">
           <span class="fas fa-arrow-left">&nbsp;Back</span>
         </button>

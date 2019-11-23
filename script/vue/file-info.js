@@ -1,5 +1,10 @@
 Vue.component('file-info', {
-  props: ['file'],
+  props: {
+    file: {
+      type: FileSystemHandle,
+      required: false
+    }
+  },
   template: `
     <table class="table table-borderless table-sm" v-if="file">
       <tbody>
