@@ -3,7 +3,7 @@ Vue.component('dir-handler', {
   data: function() {
     return {
       selected: null,
-      files: [{name: 'test', isFile: true}, {name: 'test2', isFile: false}],
+      files: [],
       path: []
     };
   },
@@ -35,6 +35,9 @@ Vue.component('dir-handler', {
         this.listDirectory(this.path.slice(0, this.path.length - 1));
       }
     }
+  },
+  mounted: function() {
+    this.listDirectory([this.handler.fileHandle]);
   },
   watch: {
     handler: function(newValue) {
