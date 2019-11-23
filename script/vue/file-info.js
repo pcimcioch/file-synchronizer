@@ -1,4 +1,3 @@
-// TODO bind correctly file-info
 Vue.component('file-info', {
   props: ['file'],
   template: `

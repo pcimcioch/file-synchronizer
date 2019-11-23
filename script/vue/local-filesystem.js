@@ -48,15 +48,11 @@ Vue.component('local-filesystem', {
             <button class="btn btn-danger fas fa-minus" v-on:click="removeDirHandler" v-bind:disabled="!selected"></button>
         </div>
     
-        <div class="row">
-          <dir-handler-list class="col col-6" v-bind:handlers="handlers" v-on:select="select" v-on:open="open"></dir-handler-list>
-          <dir-handler-info class="col col-6" v-bind:handler="selected"></dir-handler-info>
-        </div>
+        <!-- TODO: max height with scrolling-->
+        <!-- TODO: swap between those elements -->
+        <dir-handler-list v-bind:handlers="handlers" v-on:select="select" v-on:open="open"></dir-handler-list>
         <br>
-        <div class="row">
-          <dir-handler class="col col-6" v-bind:handler="opened"></dir-handler>
-          <file-info class="col col-6" v-bind:file="null"></file-info>
-        </div>
+        <dir-handler v-bind:handler="opened"></dir-handler>
       </div>
     </div>
   `

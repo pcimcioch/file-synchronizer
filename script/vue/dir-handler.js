@@ -3,66 +3,63 @@ Vue.component('dir-handler', {
   data: function() {
     return {
       selected: null,
-      files: [{name: 'test'}],
+      files: [{name: 'test', isFile: true}, {name: 'test2', isFile: false}],
       path: []
     };
   },
   methods: {
     select: function(file) {
       this.selected = file;
-      this.$emit('select', file)
     },
     open: function(file) {
-      if (!file.isDirectory) {
-        return;
+      if (file.isDirectory) {
+        this.listDirectory(this.path.concat(file));
       }
-
-      this.path.push(file);
-      this.listDirectory();
     },
-    listDirectory: async function() {
-      this.files = [];
-      this.select(null);
-      const directory = this.path[this.path.length - 1];
+    listDirectory: async function(newPath) {
+      const directory = newPath[newPath.length - 1];
 
+      const newFiles = [];
       for await (const entry of directory.getEntries()) {
-        this.files.push(entry);
+        newFiles.push(entry);
       }
+
+      this.path = newPath;
+      this.files = newFiles;
+      this.select(null);
     },
     back: function() {
       if (this.path.length === 1) {
         this.$emit('close');
       } else {
-        this.path.pop();
-        this.listDirectory();
+        this.listDirectory(this.path.slice(0, this.path.length - 1));
       }
     }
   },
   watch: {
     handler: function(newValue) {
-      this.path = [newValue.fileHandle];
-      this.listDirectory();
+      this.listDirectory([newValue.fileHandle]);
     }
   },
   template: `
-    <div class="list-group list-group-flush">
-      <button class="list-group-item list-group-item-action p-1" 
-              v-on:click="back">
-        <span class="fas fa-arrow-left" title="Back">
-          &nbsp;Back
-        </span>
-      </button>
-      <button class="list-group-item list-group-item-action p-1" 
-              v-for="file in files" 
-              v-bind:key="file.name"
-              v-bind:class="{active: file === selected}" 
-              v-on:click="select(file)"
-              v-on:dblclick="open(file)">
-        <span v-bind:title="file.name">
-          <i class="far" v-bind:class="file.isFile ? 'fa-file text-info' : 'fa-folder text-warning'"></i>
-          &nbsp;{{file.name}}
-        </span>
-      </button>
+    <div class="row">
+      <div class="list-group list-group-flush col col-6">
+        <button class="list-group-item list-group-item-action p-1" title="Back" v-on:click="back">
+          <span class="fas fa-arrow-left">&nbsp;Back</span>
+        </button>
+        <button class="list-group-item list-group-item-action p-1" 
+                v-for="file in files" 
+                v-bind:key="file.name"
+                v-bind:class="{active: file === selected}" 
+                v-on:click="select(file)"
+                v-on:dblclick="open(file)">
+          <span v-bind:title="file.name">
+            <i class="far" v-bind:class="file.isFile ? 'fa-file text-info' : 'fa-folder text-warning'"></i>
+            &nbsp;{{file.name}}
+          </span>
+        </button>
+      </div>
+      <file-info class="col col-6" v-bind:file="selected"></file-info>
     </div>
   `
 });
