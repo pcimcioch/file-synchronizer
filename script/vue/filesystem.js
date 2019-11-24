@@ -10,6 +10,11 @@ Vue.component('filesystem', {
       opened: null
     }
   },
+  computed: {
+    remote: function() {
+      return this.filesystem instanceof RemoteFilesystem;
+    }
+  },
   methods: {
     open: function(handler) {
       this.opened = handler;
@@ -35,6 +40,7 @@ Vue.component('filesystem', {
                      v-on:remove="removeStore" 
                      v-on:open="open" 
                      v-on:sync="sync"
+                     v-bind:remote="remote"
                      v-if="!opened"></stores-list>
         <!-- TODO: implement -->
         <!-- <dir-handler v-bind:handler="opened" v-on:close="close" v-if="opened"></dir-handler> -->

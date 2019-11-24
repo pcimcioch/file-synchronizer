@@ -18,7 +18,6 @@
 <body>
     <div class="container p-3" id="app">
         <connector v-on:new-connection="addRemoteFilesystem"></connector>
-        <local-filesystem></local-filesystem>
         <filesystem v-bind:filesystem="localFilesystem"></filesystem>
         <filesystem v-bind:filesystem="remoteFS" v-for="remoteFS in remoteFilesystems" v-bind:key="remoteFS.id"></filesystem>
     </div>
