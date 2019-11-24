@@ -1,4 +1,15 @@
 class RemoteFile {
+  /*** @type {boolean}*/
+  isFile = false;
+  /*** @type {boolean}*/
+  isDirectory = false;
+  /*** @type {string}*/
+  name = '';
+  /*** @type {number}*/
+  size = 0;
+  /*** @type {number}*/
+  lastModified = 0;
+
   /**
    * @type {string}
    * @private
@@ -11,10 +22,20 @@ class RemoteFile {
   _connection = null;
 
   /**
+   * @param {boolean} isFile
+   * @param {boolean} isDirectory
+   * @param {string} name
+   * @param {number} size
+   * @param {number} lastModified
    * @param {Connection} connection
    * @param {string} storeId
    */
-  constructor(connection, storeId) {
+  constructor(isFile, isDirectory, name, size, lastModified, connection, storeId) {
+    this.isFile = isFile;
+    this.isDirectory = isDirectory;
+    this.name = name;
+    this.size = size;
+    this.lastModified = lastModified;
     this._storeId = storeId;
     this._connection = connection;
   }
@@ -51,11 +72,18 @@ class RemoteFilesystem {
       this._connection.sendRequest({
         type: 'list-stores'
       }).then(response => {
-        this.stores = response.stores.map(s => {
+        this.stores = response.stores.map(store => {
           return {
-            id: s.id,
-            name: s.name,
-            fileHandle: new RemoteFile(this._connection, s.id)
+            id: store.id,
+            name: store.name,
+            fileHandle: new RemoteFile(
+              store.file.isFile,
+              store.file.isDirectory,
+              store.file.name,
+              store.file.size,
+              store.file.lastModified,
+              this._connection,
+              store.id)
           }
         });
         resolve();
