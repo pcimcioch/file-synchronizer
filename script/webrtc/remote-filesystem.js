@@ -76,7 +76,7 @@ class RemoteFile {
     return response.entries.map(entry => RemoteFile.fromObject(entry, this._path.concat(this.name), this._connection, this._storeId));
   }
 
-  async getMd5() {
+  async computeMd5() {
     const response = await this._connection.sendRequest({
       type: 'get-md5',
       storeId: this._storeId,

@@ -5,24 +5,13 @@ Vue.component('file-info', {
       required: false
     }
   },
-  data: function() {
-    return {
-      // TODO move hash to LocalFile / RemoteFile class and use it
-      hash: null
-    };
-  },
   methods: {
     showHash: async function() {
       if (!this.file || !this.file.isFile) {
         return;
       }
 
-      this.hash = await this.file.getMd5();
-    }
-  },
-  watch: {
-    file: function() {
-      this.hash = null;
+      await this.file.computeMd5();
     }
   },
   template: `
@@ -46,7 +35,8 @@ Vue.component('file-info', {
           </tr>
           <tr v-if="file.isFile">
             <td>MD5 Hash</td>
-            <td>{{ hash || 'Click info to compute' }}</td>
+            <!-- TODO: button to compute in this place -->
+            <td>{{ file.md5 || 'Click info to compute' }}</td>
           </tr>
         </tbody>
       </table>

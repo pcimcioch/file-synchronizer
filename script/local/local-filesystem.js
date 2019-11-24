@@ -10,6 +10,8 @@ class LocalFile {
   size = 0;
   /*** @type {number}*/
   lastModified = 0;
+  /*** @type {?string}*/
+  md5 = null;
 
   /**
    * @type {FileSystemHandle}
@@ -21,11 +23,6 @@ class LocalFile {
    * @private
    */
   _file = null;
-  /**
-   * @type {?string}
-   * @private
-   */
-  _md5 = null;
 
   /**
    * @param {boolean} isFile
@@ -116,15 +113,15 @@ class LocalFile {
   }
 
   /*** @returns {Promise<string>}*/
-  async getMd5() {
+  async computeMd5() {
     if (!this.isFile) {
       throw new Error('Cannot compute md5 on non-file files');
     }
 
-    if (!this._md5) {
-      this._md5 = await getMD5(this._file);
+    if (!this.md5) {
+      this.md5 = await getMD5(this._file);
     }
-    return this._md5;
+    return this.md5;
   }
 }
 

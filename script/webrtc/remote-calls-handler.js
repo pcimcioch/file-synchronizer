@@ -52,13 +52,7 @@ class RemoteCallsHandler {
    * @private
    */
   async _getEntries(storeId, path) {
-    let fileHandle;
-    try {
-      fileHandle = await this._getDirectory(storeId, path);
-    } catch (e) {
-      // TODO check if we have to do this
-      throw e;
-    }
+    const fileHandle = await this._getDirectory(storeId, path);
 
     try {
       const entries = await fileHandle.getEntries();
@@ -78,13 +72,7 @@ class RemoteCallsHandler {
    * @private
    */
   async _getMd5(storeId, path) {
-    let fileHandle;
-    try {
-      fileHandle = await this._getDirectory(storeId, path.slice(0, path.length - 1));
-    } catch (e) {
-      // TODO check if we have to do this
-      throw e;
-    }
+    const fileHandle = await this._getDirectory(storeId, path.slice(0, path.length - 1));
 
     try {
       const file = await fileHandle.getFile(path[path.length - 1]);

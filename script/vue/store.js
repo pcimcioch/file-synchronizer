@@ -35,7 +35,7 @@ Vue.component('store', {
       this.select(null);
     },
     back: function() {
-      if (this.path.length === 1) {
+      if (this.path.length <= 1) {
         this.$emit('close');
       } else {
         this.listDirectory(this.path.slice(0, this.path.length - 1));
