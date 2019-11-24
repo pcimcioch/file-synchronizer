@@ -1,3 +1,4 @@
+// TODO: remove
 Vue.component('local-filesystem', {
   data: function() {
     return {

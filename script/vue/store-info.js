@@ -1,17 +1,16 @@
-// TODO: remove
-Vue.component('dir-handler-info', {
+Vue.component('store-info', {
   props: {
-    handler: {
+    store: {
       type: Object,
       required: false
     }
   },
   template: `
-    <table class="table table-borderless table-sm" v-if="handler">
+    <table class="table table-borderless table-sm" v-if="store">
       <tbody>
         <tr>
           <td>Name</td>
-          <td>{{ handler.name }}</td>
+          <td>{{ store.name }}</td>
         </tr>
       </tbody>
     </table>

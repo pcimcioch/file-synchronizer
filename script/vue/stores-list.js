@@ -1,9 +1,13 @@
-// TODO: remove
-Vue.component('dir-handler-list', {
+Vue.component('stores-list', {
   props: {
-    handlers: {
+    stores: {
       type: Array,
       required: true
+    },
+    remote: {
+      type: Boolean,
+      required: false,
+      default: false
     },
     maxHeight: {
       type: String,
@@ -19,35 +23,35 @@ Vue.component('dir-handler-list', {
   methods: {
     select: function(entry) {
       this.selected = entry;
-      this.$emit('select', entry)
     },
     open: function(entry) {
       this.$emit('open', entry)
     },
-    removeHandler: function() {
+    removeStore: function() {
       if (this.selected) {
         this.$emit('remove', this.selected);
+        this.select(null);
       }
     },
-    addHandler: async function() {
+    addStore: async function() {
       const fileHandle = await window.chooseFileSystemEntries({type: 'openDirectory'});
-      this.$emit('add', {
-        id: fileHandle.name,
-        name: fileHandle.name,
-        fileHandle: fileHandle,
-      });
+      this.$emit('add', fileHandle);
+    },
+    syncStores: function() {
+      this.$emit('sync');
     }
   },
   template: `
     <div class="row">
       <div class="col col-6">
         <div class="btn-group btn-group-sm mb-1">
-          <button class="btn btn-primary fas fa-plus" title="Add Store" v-on:click="addHandler"></button>
-          <button class="btn btn-danger fas fa-minus" title="Remove Store" v-on:click="removeHandler" v-bind:disabled="!selected"></button>
+          <button class="btn btn-primary fas fa-plus" title="Add Store" v-on:click="addStore" v-if="!remote"></button>
+          <button class="btn btn-danger fas fa-minus" title="Remove Store" v-on:click="removeStore" v-bind:disabled="!selected" v-if="!remote"></button>
+          <button class="btn btn-info fas fa-sync" title="Sync Stores" v-on:click="syncStores" v-if="remote"></button>
         </div>
         <div class="list-group list-group-flush" v-bind:style="{'overflow-y': 'scroll', 'max-height': maxHeight}">
           <button class="list-group-item list-group-item-action p-1" 
-                  v-for="entry in handlers" 
+                  v-for="entry in stores" 
                   v-bind:key="entry.id"
                   v-bind:class="{active: entry === selected}" 
                   v-on:click="select(entry)"
@@ -56,7 +60,7 @@ Vue.component('dir-handler-list', {
           </button>
         </div>
       </div>
-      <dir-handler-info class="col col-6" v-bind:handler="selected"></dir-handler-info>
+      <store-info class="col col-6" v-bind:store="selected"></store-info>
     </div>
   `
 });

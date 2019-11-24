@@ -10,25 +10,38 @@
     <script src="script/thirdparty/popper.js"></script>
     <script src="script/thirdparty/bootstrap.js"></script>
     <script src="script/thirdparty/vue.js"></script>
-
-    <!-- TODO local copies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/md5.js"></script>
+    <script src="script/thirdparty/simplepeer.min.js"></script>
+    <script src="script/thirdparty/cryptojs-core.js"></script>
+    <script src="script/thirdparty/cryptojs-md5.js"></script>
 </head>
 
 <body>
     <div class="container p-3" id="app">
+        <connector v-on:new-connection="addRemoteFilesystem"></connector>
         <local-filesystem></local-filesystem>
+        <filesystem v-bind:filesystem="localFilesystem"></filesystem>
+        <filesystem v-bind:filesystem="remoteFS" v-for="remoteFS in remoteFilesystems" v-bind:key="remoteFS.id"></filesystem>
     </div>
 </body>
 
 <script src="script/utils/crypto.js"></script>
+
+<script src="script/local/local-filesystem.js"></script>
+<script src="script/webrtc/remote-calls-handler.js"></script>
+<script src="script/webrtc/connection.js"></script>
+<script src="script/webrtc/remote-filesystem.js"></script>
 
 <script src="script/vue/dir-handler-info.js"></script>
 <script src="script/vue/dir-handler-list.js"></script>
 <script src="script/vue/file-info.js"></script>
 <script src="script/vue/dir-handler.js"></script>
 <script src="script/vue/local-filesystem.js"></script>
+
+<script src="script/vue/connector.js"></script>
+<script src="script/vue/stores-list.js"></script>
+<script src="script/vue/store-info.js"></script>
+<script src="script/vue/filesystem.js"></script>
+
 <script src="script/vue/init.js"></script>
 
 </html>
