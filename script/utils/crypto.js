@@ -18,6 +18,7 @@ function byteArrayToWordArray(ba) {
  * @returns {Promise<string>}
  */
 function getMD5(file) {
+  // TODO can it be done async/await style?
   return new Promise((resolve, reject) => {
     const md5 = CryptoJS.algo.MD5.create();
 

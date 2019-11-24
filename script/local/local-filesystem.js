@@ -102,6 +102,19 @@ class LocalFile {
     return await LocalFile.build(dir);
   }
 
+  /**
+   * @param {string} name
+   * @returns {Promise<LocalFile>}
+   */
+  async getFile(name) {
+    if (!this.isDirectory) {
+      throw Error('Cannot get file on non-directory files');
+    }
+
+    const file = await this._fileHandle.getFile(name);
+    return await LocalFile.build(file);
+  }
+
   /*** @returns {Promise<string>}*/
   async getMd5() {
     if (!this.isFile) {

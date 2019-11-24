@@ -7,6 +7,7 @@ Vue.component('file-info', {
   },
   data: function() {
     return {
+      // TODO move hash to LocalFile / RemoteFile class and use it
       hash: null
     };
   },

@@ -75,6 +75,15 @@ class RemoteFile {
     });
     return response.entries.map(entry => RemoteFile.fromObject(entry, this._path.concat(this.name), this._connection, this._storeId));
   }
+
+  async getMd5() {
+    const response = await this._connection.sendRequest({
+      type: 'get-md5',
+      storeId: this._storeId,
+      path: this._path.concat(this.name)
+    });
+    return response.md5;
+  }
 }
 
 class RemoteFilesystem {

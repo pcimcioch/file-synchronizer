@@ -21,6 +21,8 @@ class RemoteCallsHandler {
         return this._listStores();
       case 'get-entries':
         return this._getEntries(request.storeId, request.path);
+      case 'get-md5':
+        return this._getMd5(request.storeId, request.path);
       default:
         return this._error(request.type);
     }
@@ -50,6 +52,58 @@ class RemoteCallsHandler {
    * @private
    */
   async _getEntries(storeId, path) {
+    let fileHandle;
+    try {
+      fileHandle = await this._getDirectory(storeId, path);
+    } catch (e) {
+      // TODO check if we have to do this
+      throw e;
+    }
+
+    try {
+      const entries = await fileHandle.getEntries();
+      return {
+        entries: entries.map(entry => this._fileHandleToFile(entry))
+      };
+    } catch (e) {
+      console.log(e);
+      throw 'Cannot list entries in directory cause of: ' + e.message;
+    }
+  }
+
+  /**
+   * @param {string} storeId
+   * @param {string[]} path
+   * @returns {Promise<{md5: *}>}
+   * @private
+   */
+  async _getMd5(storeId, path) {
+    let fileHandle;
+    try {
+      fileHandle = await this._getDirectory(storeId, path.slice(0, path.length - 1));
+    } catch (e) {
+      // TODO check if we have to do this
+      throw e;
+    }
+
+    try {
+      const file = await fileHandle.getFile(path[path.length - 1]);
+      const md5 = await file.getMd5();
+      return {
+        md5: md5
+      };
+    } catch (e) {
+      throw 'Cannot compute md5 of file cause: ' + e.message;
+    }
+  }
+
+  /**
+   * @param {string} storeId
+   * @param {string[]} path
+   * @returns {Promise<LocalFile>}
+   * @private
+   */
+  async _getDirectory(storeId, path) {
     const store = this._localFilesystem.stores.find(store => store.id === storeId);
     if (!store) {
       throw 'Store ' + storeId + ' cannot be found';
@@ -65,15 +119,7 @@ class RemoteCallsHandler {
       }
     }
 
-    try {
-      const entries = await fileHandle.getEntries();
-      return {
-        entries: entries.map(entry => this._fileHandleToFile(entry))
-      };
-    } catch (e) {
-      console.log(e);
-      throw 'Cannot list entries in directory cause of: ' + e.message;
-    }
+    return fileHandle;
   }
 
   /**
