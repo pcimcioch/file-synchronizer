@@ -1,55 +1,51 @@
 Vue.component('file-info', {
   props: {
-    fileHandle: {
-      type: FileSystemHandle,
+    file: {
+      type: Object,
       required: false
     }
   },
   data: function() {
     return {
-      metadata: null
+      hash: null
     };
   },
   methods: {
-    showInfo: function() {
-      if (!this.fileHandle || !this.fileHandle.isFile) {
+    showHash: async function() {
+      if (!this.file || !this.file.isFile) {
         return;
       }
 
-      this.calculateMetadata(this.fileHandle);
-    },
-    calculateMetadata: async function(fileHandle) {
-      const file = await fileHandle.getFile();
-      const md5 = await getMD5(file);
-
-      this.metadata = {
-        size: file.size,
-        md5: md5
-      };
+      this.hash = await this.file.getMd5();
     }
   },
   watch: {
-    fileHandle: function() {
-      this.metadata = null;
+    file: function() {
+      this.hash = null;
     }
   },
   template: `
     <div>
-      <button class="btn btn-sm btn-info far fa-question-circle" title="More info" v-on:click="showInfo"></button>
-      <table class="table table-borderless table-sm" v-if="fileHandle">
+      <button class="btn btn-sm btn-info far fa-question-circle" title="Get Hash" v-on:click="showHash"></button>
+      <table class="table table-borderless table-sm" v-if="file">
         <tbody>
           <tr>
             <td>Name</td>
-            <td>{{ fileHandle.name }}</td>
+            <td>{{ file.name }}</td>
           </tr>
-          <tr v-if="fileHandle.isFile">
+          <tr v-if="file.isFile">
             <!-- TODO: size in human readable form -->
             <td>Size</td>
-            <td>{{ metadata ? metadata.size : 'Click info to compute' }}</td>
+            <td>{{ file.size }}</td>
           </tr>
-          <tr v-if="fileHandle.isFile">
+          <tr v-if="file.isFile">
+            <!-- TODO: date in human readable form -->
+            <td>Last Modified</td>
+            <td>{{ file.lastModified }}</td>
+          </tr>
+          <tr v-if="file.isFile">
             <td>MD5 Hash</td>
-            <td>{{ metadata ? metadata.md5 : 'Click info to compute' }}</td>
+            <td>{{ hash || 'Click info to compute' }}</td>
           </tr>
         </tbody>
       </table>

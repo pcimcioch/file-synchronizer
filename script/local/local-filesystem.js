@@ -21,6 +21,11 @@ class LocalFile {
    * @private
    */
   _file = null;
+  /**
+   * @type {?string}
+   * @private
+   */
+  _md5 = null;
 
   /**
    * @param {boolean} isFile
@@ -82,7 +87,10 @@ class LocalFile {
 
   /*** @returns {Promise<string>}*/
   async getMd5() {
-    return await getMD5(this._file);
+    if (!this._md5) {
+      this._md5 = await getMD5(this._file);
+    }
+    return this._md5;
   }
 }
 

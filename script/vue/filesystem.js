@@ -42,8 +42,7 @@ Vue.component('filesystem', {
                      v-on:sync="sync"
                      v-bind:remote="remote"
                      v-if="!opened"></stores-list>
-        <!-- TODO: implement -->
-        <!-- <dir-handler v-bind:handler="opened" v-on:close="close" v-if="opened"></dir-handler> -->
+        <store v-bind:store="opened" v-on:close="close" v-if="opened"></store>
       </div>
     </div>
   `
