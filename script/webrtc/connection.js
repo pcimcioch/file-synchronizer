@@ -10,7 +10,7 @@ class DefaultHandler {
 
 class Connection {
 
-  /*** @type [string]*/
+  /*** @type {?string}*/
   sdp = null;
   /*** @type {boolean}*/
   connected = false;

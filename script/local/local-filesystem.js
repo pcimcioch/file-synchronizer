@@ -12,10 +12,15 @@ class LocalFile {
   lastModified = 0;
 
   /**
-   * @type {FileSystemDirectoryHandle}
+   * @type {FileSystemHandle}
    * @private
    */
   _fileHandle = null;
+  /**
+   * @type {?File}
+   * @private
+   */
+  _file = null;
 
   /**
    * @param {boolean} isFile
@@ -23,50 +28,61 @@ class LocalFile {
    * @param {string} name
    * @param {number} size
    * @param {number} lastModified
-   * @param {FileSystemDirectoryHandle} fileHandle
+   * @param {FileSystemHandle} fileHandle
+   * @param {?File} file
    */
-  constructor(isFile, isDirectory, name, size, lastModified, fileHandle) {
+  constructor(isFile, isDirectory, name, size, lastModified, fileHandle, file) {
     this.isFile = isFile;
     this.isDirectory = isDirectory;
     this.name = name;
     this.size = size;
     this.lastModified = lastModified;
     this._fileHandle = fileHandle;
+    this._file = file;
   }
 
   /**
-   *
-   * @param {FileSystemDirectoryHandle} fileHandle
+   * @param {FileSystemHandle} fileHandle
    * @returns {Promise<LocalFile>}
    */
-  static build(fileHandle) {
-    return new Promise((resolve, reject) => {
-      if (fileHandle.isFile) {
-        fileHandle.getFile().then(file => resolve(new LocalFile(
-          fileHandle.isFile,
-          fileHandle.isDirectory,
-          fileHandle.name,
-          file.size,
-          file.lastModified,
-          fileHandle
-        ))).catch(err => reject(err));
-      } else {
-        resolve(new LocalFile(
-          fileHandle.isFile,
-          fileHandle.isDirectory,
-          fileHandle.name,
-          0,
-          0,
-          fileHandle
-        ));
-      }
-    });
+  static async build(fileHandle) {
+    if (fileHandle.isDirectory) {
+      return new LocalFile(
+        fileHandle.isFile,
+        fileHandle.isDirectory,
+        fileHandle.name,
+        0,
+        0,
+        fileHandle,
+        null
+      );
+    }
+    const file = await fileHandle.getFile();
+    return new LocalFile(
+      fileHandle.isFile,
+      fileHandle.isDirectory,
+      fileHandle.name,
+      file.size,
+      file.lastModified,
+      fileHandle,
+      file
+    );
   }
 
-  getEntries() {
-    return new Promise((resolve, reject) => {
+  /*** @returns {Promise<[LocalFile]>}*/
+  async getEntries() {
+    const files = [];
+    for await (const entry of this._fileHandle.getEntries()) {
+      const localFile = await LocalFile.build(entry);
+      files.push(localFile);
+    }
 
-    });
+    return files;
+  }
+
+  /*** @returns {Promise<string>}*/
+  async getMd5() {
+    return await getMD5(this._file);
   }
 }
 
@@ -82,18 +98,14 @@ class LocalFilesystem {
 
   /**
    * @param {FileSystemDirectoryHandle} fileHandle
-   * @returns {Promise<null>}
+   * @returns {Promise<void>}
    */
-  addStore(fileHandle) {
-    return new Promise((resolve, reject) => {
-      LocalFile.build(fileHandle).then(localFile => {
-        this.stores.push({
-          id: uuid4(),
-          name: localFile.name,
-          fileHandle: localFile
-        });
-        resolve();
-      }).catch(err => reject(err));
+  async addStore(fileHandle) {
+    const localFile = await LocalFile.build(fileHandle);
+    this.stores.push({
+      id: uuid4(),
+      name: localFile.name,
+      fileHandle: localFile
     });
   }
 

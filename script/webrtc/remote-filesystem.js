@@ -66,28 +66,25 @@ class RemoteFilesystem {
     this._connection = connection;
   }
 
-  /*** @returns {Promise<null>}*/
-  refreshStores() {
-    return new Promise((resolve, reject) => {
-      this._connection.sendRequest({
-        type: 'list-stores'
-      }).then(response => {
-        this.stores = response.stores.map(store => {
-          return {
-            id: store.id,
-            name: store.name,
-            fileHandle: new RemoteFile(
-              store.file.isFile,
-              store.file.isDirectory,
-              store.file.name,
-              store.file.size,
-              store.file.lastModified,
-              this._connection,
-              store.id)
-          }
-        });
-        resolve();
-      }).catch(error => reject(error));
+  /*** @returns {Promise<void>}*/
+  async refreshStores() {
+    const response = await this._connection.sendRequest({
+      type: 'list-stores'
+    });
+
+    this.stores = response.stores.map(store => {
+      return {
+        id: store.id,
+        name: store.name,
+        fileHandle: new RemoteFile(
+          store.file.isFile,
+          store.file.isDirectory,
+          store.file.name,
+          store.file.size,
+          store.file.lastModified,
+          this._connection,
+          store.id)
+      }
     });
   }
 }

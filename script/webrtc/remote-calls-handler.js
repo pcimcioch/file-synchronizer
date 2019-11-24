@@ -28,25 +28,23 @@ class RemoteCallsHandler {
    * @returns {Promise<Object>}
    * @private
    */
-  _listStores() {
-    return new Promise((resolve) => {
-      const stores = this._localFilesystem.stores;
-      resolve({
-        stores: stores.map(store => {
-          return {
-            id: store.id,
-            name: store.name,
-            file: {
-              isFile: store.fileHandle.isFile,
-              isDirectory: store.fileHandle.isDirectory,
-              name: store.fileHandle.name,
-              size: store.fileHandle.size,
-              lastModified: store.fileHandle.lastModified
-            }
-          };
-        })
-      });
-    });
+  async _listStores() {
+    const stores = this._localFilesystem.stores;
+    return {
+      stores: stores.map(store => {
+        return {
+          id: store.id,
+          name: store.name,
+          file: {
+            isFile: store.fileHandle.isFile,
+            isDirectory: store.fileHandle.isDirectory,
+            name: store.fileHandle.name,
+            size: store.fileHandle.size,
+            lastModified: store.fileHandle.lastModified
+          }
+        };
+      })
+    };
   }
 
   /**
