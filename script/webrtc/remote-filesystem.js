@@ -20,6 +20,11 @@ class RemoteFile {
    * @private
    */
   _connection = null;
+  /**
+   * @type {string[]}
+   * @private
+   */
+  _path = [];
 
   /**
    * @param {boolean} isFile
@@ -27,17 +32,48 @@ class RemoteFile {
    * @param {string} name
    * @param {number} size
    * @param {number} lastModified
+   * @param {string[]} path
    * @param {Connection} connection
    * @param {string} storeId
    */
-  constructor(isFile, isDirectory, name, size, lastModified, connection, storeId) {
+  constructor(isFile, isDirectory, name, size, lastModified, path, connection, storeId) {
     this.isFile = isFile;
     this.isDirectory = isDirectory;
     this.name = name;
     this.size = size;
     this.lastModified = lastModified;
+    this._path = path;
     this._storeId = storeId;
     this._connection = connection;
+  }
+
+  /**
+   * @param {Object} obj
+   * @param {string[]} path
+   * @param {Connection} connection
+   * @param {string} storeId
+   * @returns {RemoteFile}
+   */
+  static fromObject(obj, path, connection, storeId) {
+    return new RemoteFile(
+      obj.isFile,
+      obj.isDirectory,
+      obj.name,
+      obj.size,
+      obj.lastModified,
+      path,
+      connection,
+      storeId);
+  }
+
+  /*** @returns {Promise<RemoteFile[]>}*/
+  async getEntries() {
+    const response = await this._connection.sendRequest({
+      type: 'get-entries',
+      storeId: this._storeId,
+      path: this._path.concat(this.name)
+    });
+    return response.entries.map(entry => RemoteFile.fromObject(entry, this._path.concat(this.name), this._connection, this._storeId));
   }
 }
 
@@ -76,14 +112,7 @@ class RemoteFilesystem {
       return {
         id: store.id,
         name: store.name,
-        fileHandle: new RemoteFile(
-          store.file.isFile,
-          store.file.isDirectory,
-          store.file.name,
-          store.file.size,
-          store.file.lastModified,
-          this._connection,
-          store.id)
+        fileHandle: RemoteFile.fromObject(store.file, [], this._connection, store.id)
       }
     });
   }

@@ -74,8 +74,12 @@ class LocalFile {
     );
   }
 
-  /*** @returns {Promise<[LocalFile]>}*/
+  /*** @returns {Promise<LocalFile[]>}*/
   async getEntries() {
+    if (!this.isDirectory) {
+      throw Error('Cannot list entries on non-directory files');
+    }
+
     const files = [];
     for await (const entry of this._fileHandle.getEntries()) {
       const localFile = await LocalFile.build(entry);
@@ -85,8 +89,25 @@ class LocalFile {
     return files;
   }
 
+  /**
+   * @param {string} name
+   * @returns {Promise<LocalFile>}
+   */
+  async getDirectory(name) {
+    if (!this.isDirectory) {
+      throw Error('Cannot get directory on non-directory files');
+    }
+
+    const dir = await this._fileHandle.getDirectory(name);
+    return await LocalFile.build(dir);
+  }
+
   /*** @returns {Promise<string>}*/
   async getMd5() {
+    if (!this.isFile) {
+      throw new Error('Cannot compute md5 on non-file files');
+    }
+
     if (!this._md5) {
       this._md5 = await getMD5(this._file);
     }
@@ -101,7 +122,7 @@ class LocalFilesystem {
    * @property {string} name
    * @property {LocalFile} fileHandle
    */
-  /*** @type {Array<Store>}*/
+  /*** @type {Store[]}*/
   stores = [];
 
   /**

@@ -1,10 +1,6 @@
 class DefaultHandler {
-  handle() {
-    return new Promise((resolve, reject) => {
-      reject({
-        error: 'Connection not ready yet'
-      });
-    });
+  async handle() {
+    throw 'Connection not ready yet';
   }
 }
 
