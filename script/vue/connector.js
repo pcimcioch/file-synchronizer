@@ -29,10 +29,10 @@ Vue.component('connector', {
   watch: {
     connected: function(newValue) {
       if (newValue) {
-        // TODO: refresh stores after connecting
         this.$emit('new-connection', this.connection);
         this.connection = null;
         this.state = 'Waiting';
+        this.otherSdp = null;
       }
     }
   },

@@ -9,6 +9,8 @@ class RemoteFile {
   size = 0;
   /*** @type {number}*/
   lastModified = 0;
+  /*** @type {?string}*/
+  md5 = null;
 
   /**
    * @type {string}
@@ -82,6 +84,7 @@ class RemoteFile {
       storeId: this._storeId,
       path: this._path.concat(this.name)
     });
+    this.md5 = response.md5;
     return response.md5;
   }
 }

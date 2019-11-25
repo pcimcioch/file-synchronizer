@@ -35,6 +35,7 @@ class Connection {
     this._peer.on('data', data => this._handleData(data));
   }
 
+  /*** @param {string} sdp*/
   connect(sdp) {
     if (this.connected) {
       throw 'Connection already established';
@@ -62,6 +63,7 @@ class Connection {
       return;
     }
 
+    clearTimeout(promise.time);
     if (response.e) {
       promise.reject(response.e);
     } else {
@@ -86,6 +88,14 @@ class Connection {
     this._peer.send(JSON.stringify(obj));
   }
 
+  _timeout(requestId) {
+    const promise = this._requests[requestId];
+    delete this._requests[requestId];
+    if (promise) {
+      promise.reject('Timeout');
+    }
+  }
+
   /**
    * @param {Object} request
    * @returns {Promise<Object>}
@@ -93,16 +103,17 @@ class Connection {
   sendRequest(request) {
     return new Promise((resolve, reject) => {
       const requestId = uuid4();
+      const timeout = setTimeout(() => this._timeout(requestId), 5000);
       this._requests[requestId] = {
         resolve: resolve,
-        reject: reject
+        reject: reject,
+        timeout: timeout
       };
       this._sendJson({
         t: 'rq',
         rid: requestId,
         r: request
       })
-      // TODO: reject after timeout?
     });
   }
 }

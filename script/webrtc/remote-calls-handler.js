@@ -76,7 +76,7 @@ class RemoteCallsHandler {
 
     try {
       const file = await fileHandle.getFile(path[path.length - 1]);
-      const md5 = await file.getMd5();
+      const md5 = await file.computeMd5();
       return {
         md5: md5
       };
