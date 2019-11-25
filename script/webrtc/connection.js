@@ -4,6 +4,7 @@ class DefaultHandler {
   }
 }
 
+// TODO: console.error and all await errors maybe could be logged in remote filesystem widget?
 class Connection {
 
   /*** @type {?string}*/
@@ -28,7 +29,7 @@ class Connection {
 
     // TODO: error handling
     // TODO: support closing
-    this._peer.on('error', err => console.log('error', err));
+    this._peer.on('error', err => console.error('error ' + err));
     this._peer.on('signal', data => this.sdp = JSON.stringify(data));
     this._peer.on('connect', () => this.connected = true);
     this._peer.on('data', data => this._handleData(data));
@@ -48,8 +49,7 @@ class Connection {
     } else if (json.t === 'rq') {
       this._handleRequest(json);
     } else {
-      // TODO: error handling
-      console.log('Unsupported request type');
+      console.error('Unsupported request type');
     }
   }
 
@@ -58,8 +58,7 @@ class Connection {
     const promise = this._requests[requestId];
     delete this._requests[requestId];
     if (!promise) {
-      // TODO: error handling
-      console.log('Got response to unknown request: ' + requestId);
+      console.error('Got response to unknown request: ' + requestId);
       return;
     }
 

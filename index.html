@@ -16,10 +16,14 @@
 </head>
 
 <body>
-    <div class="container p-3" id="app">
-        <connector v-on:new-connection="addRemoteFilesystem"></connector>
-        <filesystem v-bind:filesystem="localFilesystem"></filesystem>
-        <filesystem v-bind:filesystem="remoteFS" v-for="remoteFS in remoteFilesystems" v-bind:key="remoteFS.id"></filesystem>
+    <div class="row" id="app">
+        <div class="col offset-1 col-7">
+            <filesystem v-bind:filesystem="localFilesystem"></filesystem>
+            <filesystem v-bind:filesystem="remoteFS" v-for="remoteFS in remoteFilesystems" v-bind:key="remoteFS.id"></filesystem>
+        </div>
+        <div class="col col-3">
+            <connector v-on:new-connection="addRemoteFilesystem"></connector>
+        </div>
     </div>
 </body>
 
@@ -30,6 +34,7 @@
 <script src="script/webrtc/connection.js"></script>
 <script src="script/webrtc/remote-filesystem.js"></script>
 
+<script src="script/vue/filters.js"></script>
 
 <script src="script/vue/file-info.js"></script>
 <script src="script/vue/connector.js"></script>

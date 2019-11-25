@@ -12,7 +12,7 @@ Vue.component('stores-list', {
     maxHeight: {
       type: String,
       required: false,
-      default: '150px'
+      default: '200px'
     }
   },
   data: function() {

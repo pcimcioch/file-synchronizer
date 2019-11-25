@@ -35,6 +35,7 @@ Vue.component('filesystem', {
   template: `
     <div class="card">
       <div class="card-body">
+        <h5 class="card-title">{{ remote ? 'Remote Filesystem' : 'Local Filesystem' }}</h5>
         <stores-list v-bind:stores="filesystem.stores" 
                      v-on:add="addStore" 
                      v-on:remove="removeStore" 

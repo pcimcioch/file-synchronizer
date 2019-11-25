@@ -18,26 +18,14 @@ function byteArrayToWordArray(ba) {
  * @returns {Promise<string>}
  */
 function getMD5(file) {
-  // TODO can it be done async/await style?
-  return new Promise((resolve, reject) => {
-    const md5 = CryptoJS.algo.MD5.create();
-
-    const writableStream = new WritableStream({
-      write(chunk) {
-        md5.update(byteArrayToWordArray(chunk));
-      },
-      close() {
-        const hash = md5.finalize();
-        const hashHex = hash.toString(CryptoJS.enc.Hex);
-        resolve(hashHex);
-      },
-      abort(err) {
-        reject(err);
-      }
-    });
-
-    file.stream().pipeTo(writableStream);
+  const md5 = CryptoJS.algo.MD5.create();
+  const writableStream = new WritableStream({
+    write(chunk) {
+      md5.update(byteArrayToWordArray(chunk));
+    }
   });
+
+  return file.stream().pipeTo(writableStream).then(() => md5.finalize().toString(CryptoJS.enc.Hex));
 }
 
 /*** @returns {string}*/
