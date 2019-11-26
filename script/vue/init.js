@@ -2,11 +2,11 @@ new Vue({
   el: '#app',
   data: {
     localFilesystem: new LocalFilesystem(),
-    remoteFilesystems: []
+    remoteFilesystems: [] // TODO there should be a vue widger to manage remote filesystems. With possibility to disconnect/remove. All errors from Connection should be logged there
   },
   methods: {
     addRemoteFilesystem: function(connection) {
-      connection.handler = new RemoteCallsHandler(this.localFilesystem);
+      connection.requestHandler = new RemoteCallsHandler(this.localFilesystem);
       this.remoteFilesystems.push(new RemoteFilesystem(connection));
     }
   }

@@ -1,18 +1,25 @@
-class DefaultHandler {
+class DefaultRequestHandler {
   async handle() {
     throw 'Connection not ready yet';
   }
 }
 
-// TODO: console.error and all await errors maybe could be logged in remote filesystem widget?
+class DefaultErrorHandler {
+  handle(message) {
+    console.log(new Date(), message);
+  }
+}
+
 class Connection {
 
   /*** @type {?string}*/
   sdp = null;
-  /*** @type {boolean}*/
-  connected = false;
+  /*** @type {string} One of: starting, signaled, connected, closed*/
+  state = 'starting';
   /*** @type {Object}*/
-  handler = new DefaultHandler();
+  requestHandler = new DefaultRequestHandler();
+  /** @type {Object} */
+  errorHandler = new DefaultErrorHandler();
 
   /**
    * @type {SimplePeer}
@@ -27,19 +34,21 @@ class Connection {
       trickle: false
     });
 
-    // TODO: error handling
-    // TODO: support closing
-    this._peer.on('error', err => console.error('error ' + err));
-    this._peer.on('signal', data => this.sdp = JSON.stringify(data));
-    this._peer.on('connect', () => this.connected = true);
+    this._peer.on('error', err => this.errorHandler.handle('Peer error: ' + err));
+    this._peer.on('signal', data => {
+      this.sdp = JSON.stringify(data);
+      this.state = 'signaled';
+    });
+    this._peer.on('connect', () => this.state = 'connected');
     this._peer.on('data', data => this._handleData(data));
+    this._peer.on('close', () => this.state = 'closed');
   }
 
   /*** @param {string} sdp*/
   connect(sdp) {
-    if (this.connected) {
-      throw 'Connection already established';
-    }
+    if (this.state === 'connected') throw 'Connection already established';
+    if (this.state === 'closed') throw 'Connection already closed';
+
     this._peer.signal(JSON.parse(sdp));
   }
 
@@ -50,7 +59,7 @@ class Connection {
     } else if (json.t === 'rq') {
       this._handleRequest(json);
     } else {
-      console.error('Unsupported request type');
+      this.errorHandler.handle('Unsupported request type ' + json);
     }
   }
 
@@ -59,7 +68,7 @@ class Connection {
     const promise = this._requests[requestId];
     delete this._requests[requestId];
     if (!promise) {
-      console.error('Got response to unknown request: ' + requestId);
+      this.errorHandler.handle('Got response to unknown request: ' + requestId);
       return;
     }
 
@@ -73,7 +82,7 @@ class Connection {
 
   _handleRequest(request) {
     const requestId = request.rid;
-    this.handler.handle(request.r).then(response => this._sendJson({
+    this.requestHandler.handle(request.r).then(response => this._sendJson({
       t: 'rs',
       rid: requestId,
       r: response
@@ -101,6 +110,9 @@ class Connection {
    * @returns {Promise<Object>}
    */
   sendRequest(request) {
+    if (this.state === 'starting' || this.state === 'signaled') throw 'Connection not yet established';
+    if (this.state === 'closed') throw 'Connection already closed';
+
     return new Promise((resolve, reject) => {
       const requestId = uuid4();
       const timeout = setTimeout(() => this._timeout(requestId), 5000);

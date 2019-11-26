@@ -9,7 +9,7 @@ Vue.component('connector', {
   },
   computed: {
     connected: function() {
-      return this.connection && this.connection.connected;
+      return this.connection && this.connection.state === 'connected';
     }
   },
   methods: {
