@@ -42,7 +42,7 @@ Vue.component('filesystem', {
     setTimeout(() => this.sync(), 500);
   },
   template: `
-    <div class="card mb-2">
+    <div class="card">
       <div class="card-body">
         <h5 class="card-title">{{ remote ? 'Remote Filesystem' : 'Local Filesystem' }}</h5>
         <stores-list v-bind:stores="filesystem.stores" 

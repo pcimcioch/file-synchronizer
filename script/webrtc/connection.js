@@ -128,4 +128,10 @@ class Connection {
       })
     });
   }
+
+  close() {
+    if (this.state === 'closed') throw 'Connection already closed';
+
+    this._peer.destroy();
+  }
 }

@@ -102,21 +102,18 @@ class RemoteFilesystem {
   /*** @type {Array<RemoteStore>}*/
   stores = [];
 
-  /**
-   * @type {Connection}
-   * @private
-   */
-  _connection = null;
+  /*** @type {Connection}*/
+  connection = null;
 
   /*** @param {Connection} connection*/
   constructor(connection) {
     this.id = uuid4();
-    this._connection = connection;
+    this.connection = connection;
   }
 
   /*** @returns {Promise<void>}*/
   async refreshStores() {
-    const response = await this._connection.sendRequest({
+    const response = await this.connection.sendRequest({
       type: 'list-stores'
     });
 
@@ -124,7 +121,7 @@ class RemoteFilesystem {
       return {
         id: store.id,
         name: store.name,
-        fileHandle: RemoteFile.fromObject(store.file, [], this._connection, store.id)
+        fileHandle: RemoteFile.fromObject(store.file, [], this.connection, store.id)
       }
     });
   }

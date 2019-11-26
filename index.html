@@ -5,6 +5,7 @@
     <title>Synchronizer</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/fontawesome.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <script src="script/thirdparty/jquery.js"></script>
     <script src="script/thirdparty/popper.js"></script>
@@ -16,13 +17,14 @@
 </head>
 
 <body>
-    <div class="row" id="app">
+    <div class="row pt-3" id="app">
         <div class="col offset-1 col-7">
-            <filesystem v-bind:filesystem="localFilesystem"></filesystem>
-            <filesystem v-bind:filesystem="remoteFS" v-for="remoteFS in remoteFilesystems" v-bind:key="remoteFS.id"></filesystem>
+            <filesystem class="mb-2" v-bind:filesystem="localFilesystem"></filesystem>
+            <filesystem class="mb-2" v-bind:filesystem="remoteFS" v-for="remoteFS in remoteFilesystems" v-bind:key="remoteFS.id"></filesystem>
         </div>
         <div class="col col-3">
-            <connector v-on:new-connection="addRemoteFilesystem"></connector>
+            <connector class="mb-2" v-on:new-connection="addRemoteFilesystem"></connector>
+            <connections class="mb-2" v-bind:remote-filesystems="remoteFilesystems" v-on:remove="removeRemoteFilesystem"></connections>
         </div>
     </div>
 </body>
@@ -36,12 +38,14 @@
 
 <script src="script/vue/filters.js"></script>
 
-<script src="script/vue/file-info.js"></script>
-<script src="script/vue/connector.js"></script>
-<script src="script/vue/store.js"></script>
-<script src="script/vue/store-info.js"></script>
-<script src="script/vue/stores-list.js"></script>
-<script src="script/vue/filesystem.js"></script>
+<script src="script/vue/connect/connector.js"></script>
+<script src="script/vue/connect/connections.js"></script>
+
+<script src="script/vue/filesystem/file-info.js"></script>
+<script src="script/vue/filesystem/store.js"></script>
+<script src="script/vue/filesystem/store-info.js"></script>
+<script src="script/vue/filesystem/stores-list.js"></script>
+<script src="script/vue/filesystem/filesystem.js"></script>
 
 <script src="script/vue/init.js"></script>
 
