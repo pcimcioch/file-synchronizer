@@ -1,5 +1,5 @@
 // TODO: All errors from Connection should be logged here?
-Vue.component('connections', {
+export const connections = {
   props: {
     peers: {
       type: Array,
@@ -43,4 +43,4 @@ Vue.component('connections', {
      </div>
     </div>
   `
-});
+};

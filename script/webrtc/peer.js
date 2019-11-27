@@ -1,4 +1,7 @@
-class Peer {
+import {RemoteCallsHandler} from './remote-calls-handler.js';
+import {RemoteFilesystem} from './remote-filesystem.js';
+
+export class Peer {
 
   /*** @type {?RemoteFilesystem}*/
   filesystem = null;

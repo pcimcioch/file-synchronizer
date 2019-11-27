@@ -17,7 +17,7 @@ function byteArrayToWordArray(ba) {
  * @param {Blob} file
  * @returns {Promise<string>}
  */
-function getMD5(file) {
+export function getMD5(file) {
   const md5 = CryptoJS.algo.MD5.create();
   const writableStream = new WritableStream({
     write(chunk) {
@@ -29,7 +29,7 @@ function getMD5(file) {
 }
 
 /*** @returns {string}*/
-function uuid4() {
+export function uuid4() {
   function hex (s, b) {
     return s +
       (b >>> 4   ).toString (16) +  // high nibble

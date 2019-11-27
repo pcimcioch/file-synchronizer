@@ -1,6 +1,9 @@
 // TODO: make it beautiful
 // TODO: use firedb / firebase to exchange peers data
-Vue.component('connector', {
+import {uuid4} from '../../utils/crypto.js';
+import {Connection} from '../../webrtc/connection.js';
+
+export const connector = {
   data: function() {
     return {
       connection: null,
@@ -59,4 +62,4 @@ Vue.component('connector', {
       </div>
     </div>
   `
-});
+};

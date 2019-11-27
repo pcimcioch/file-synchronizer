@@ -1,4 +1,6 @@
-Vue.component('file-info', {
+import {bytes, date} from '../filters.js';
+
+export const fileInfo = {
   props: {
     file: {
       type: Object,
@@ -13,6 +15,10 @@ Vue.component('file-info', {
 
       await this.file.computeMd5();
     }
+  },
+  filters: {
+    bytes: bytes,
+    date: date
   },
   template: `
     <div>
@@ -39,4 +45,4 @@ Vue.component('file-info', {
       </table>
     </div>
   `
-});
+};

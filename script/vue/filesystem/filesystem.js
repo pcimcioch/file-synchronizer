@@ -1,4 +1,9 @@
-Vue.component('filesystem', {
+import {LocalFilesystem} from '../../local/local-filesystem.js';
+import {RemoteFilesystem} from '../../webrtc/remote-filesystem.js';
+import {storesList} from './stores-list.js';
+import {store} from './store.js';
+
+export const filesystem = {
   props: {
     filesystem: {
       type: Object,
@@ -41,6 +46,10 @@ Vue.component('filesystem', {
   mounted: function() {
     setTimeout(() => this.sync(), 500);
   },
+  components: {
+    storesList: storesList,
+    store: store
+  },
   template: `
     <div class="card">
       <div class="card-body">
@@ -56,4 +65,4 @@ Vue.component('filesystem', {
       </div>
     </div>
   `
-});
+};

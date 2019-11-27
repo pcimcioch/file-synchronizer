@@ -1,4 +1,6 @@
-Vue.component('store', {
+import {fileInfo} from './file-info.js';
+
+export const store = {
   props: {
     store: {
       type: Object,
@@ -50,6 +52,9 @@ Vue.component('store', {
       this.listDirectory([newValue.fileHandle]);
     }
   },
+  components: {
+    fileInfo: fileInfo
+  },
   template: `
     <div class="row">
       <div class="list-group list-group-flush col col-6"  v-bind:style="{'overflow-y': 'scroll', 'max-height': maxHeight}">
@@ -71,4 +76,4 @@ Vue.component('store', {
       <file-info class="col col-6" v-bind:file="selected"></file-info>
     </div>
   `
-});
+};

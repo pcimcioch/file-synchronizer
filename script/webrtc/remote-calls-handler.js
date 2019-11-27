@@ -1,4 +1,4 @@
-class RemoteCallsHandler {
+export class RemoteCallsHandler {
 
   /**
    * @type {LocalFilesystem}

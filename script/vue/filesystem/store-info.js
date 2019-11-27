@@ -1,4 +1,4 @@
-Vue.component('store-info', {
+export const storeInfo = {
   props: {
     store: {
       type: Object,
@@ -15,4 +15,4 @@ Vue.component('store-info', {
       </tbody>
     </table>
   `
-});
+};

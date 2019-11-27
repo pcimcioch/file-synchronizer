@@ -1,4 +1,6 @@
-Vue.component('stores-list', {
+import {storeInfo} from './store-info.js';
+
+export const storesList = {
   props: {
     stores: {
       type: Array,
@@ -41,6 +43,9 @@ Vue.component('stores-list', {
       this.$emit('sync');
     }
   },
+  components: {
+    storeInfo: storeInfo
+  },
   template: `
     <div class="row">
       <div class="col col-6">
@@ -63,4 +68,4 @@ Vue.component('stores-list', {
       <store-info class="col col-6" v-bind:store="selected"></store-info>
     </div>
   `
-});
+};

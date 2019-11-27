@@ -89,7 +89,7 @@ class RemoteFile {
   }
 }
 
-class RemoteFilesystem {
+export class RemoteFilesystem {
 
   /**
    * @typedef {Object<string, Object>} RemoteStore

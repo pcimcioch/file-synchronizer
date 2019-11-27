@@ -1,3 +1,5 @@
+import {uuid4} from '../utils/crypto.js';
+
 class DefaultRequestHandler {
   async handle() {
     throw 'Connection not ready yet';
@@ -10,7 +12,7 @@ class DefaultErrorHandler {
   }
 }
 
-class Connection {
+export class Connection {
 
   /*** @type {?string}*/
   sdp = null;

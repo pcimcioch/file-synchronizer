@@ -1,3 +1,5 @@
+import {getMD5, uuid4} from '../utils/crypto.js';
+
 class LocalFile {
 
   /*** @type {boolean}*/
@@ -125,7 +127,7 @@ class LocalFile {
   }
 }
 
-class LocalFilesystem {
+export class LocalFilesystem {
   /**
    * @typedef {Object<string, Object>} Store
    * @property {string} id
