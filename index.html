@@ -20,11 +20,11 @@
     <div class="row pt-3" id="app">
         <div class="col offset-1 col-7">
             <filesystem class="mb-2" v-bind:filesystem="localFilesystem"></filesystem>
-            <filesystem class="mb-2" v-bind:filesystem="remoteFS" v-for="remoteFS in remoteFilesystems" v-bind:key="remoteFS.id"></filesystem>
+            <filesystem class="mb-2" v-bind:filesystem="peer.filesystem" v-for="peer in peers" v-bind:key="peer.id" v-if="peer.filesystem"></filesystem>
         </div>
         <div class="col col-3">
-            <connector class="mb-2" v-on:new-connection="addRemoteFilesystem"></connector>
-            <connections class="mb-2" v-bind:remote-filesystems="remoteFilesystems" v-on:remove="removeRemoteFilesystem"></connections>
+            <connector class="mb-2" v-on:new-connection="addPeer"></connector>
+            <connections class="mb-2" v-bind:peers="peers" v-on:remove="removePeer"></connections>
         </div>
     </div>
 </body>
@@ -35,6 +35,7 @@
 <script src="script/webrtc/remote-calls-handler.js"></script>
 <script src="script/webrtc/connection.js"></script>
 <script src="script/webrtc/remote-filesystem.js"></script>
+<script src="script/webrtc/peer.js"></script>
 
 <script src="script/vue/filters.js"></script>
 

@@ -91,8 +91,6 @@ class RemoteFile {
 
 class RemoteFilesystem {
 
-  /*** @type {string}*/
-  id = '';
   /**
    * @typedef {Object<string, Object>} RemoteStore
    * @property {string} id
@@ -103,17 +101,16 @@ class RemoteFilesystem {
   stores = [];
 
   /*** @type {Connection}*/
-  connection = null;
+  _connection = null;
 
   /*** @param {Connection} connection*/
   constructor(connection) {
-    this.id = uuid4();
-    this.connection = connection;
+    this._connection = connection;
   }
 
   /*** @returns {Promise<void>}*/
   async refreshStores() {
-    const response = await this.connection.sendRequest({
+    const response = await this._connection.sendRequest({
       type: 'list-stores'
     });
 
@@ -121,10 +118,8 @@ class RemoteFilesystem {
       return {
         id: store.id,
         name: store.name,
-        fileHandle: RemoteFile.fromObject(store.file, [], this.connection, store.id)
+        fileHandle: RemoteFile.fromObject(store.file, [], this._connection, store.id)
       }
     });
   }
-
-  // TODO can vue watch delegate properties? Then 'connection' could be private and oly state would be exposed
 }

@@ -1,16 +1,18 @@
+// TODO add possibility to send file over webrtc
 new Vue({
   el: '#app',
   data: {
-    localFilesystem: new LocalFilesystem(), // TODO another abstraction: peer. With optional remoteFilesystem configured. Remove id from remote filesystem and move it to peer
-    remoteFilesystems: []
+    localFilesystem: new LocalFilesystem(),
+    peers: []
   },
   methods: {
-    addRemoteFilesystem: function(connection) {
-      connection.requestHandler = new RemoteCallsHandler(this.localFilesystem);
-      this.remoteFilesystems.push(new RemoteFilesystem(connection));
+    addPeer: function(id, name, connection) {
+      const peer = new Peer(id, name);
+      peer.connect(this.localFilesystem, connection);
+      this.peers.push(peer);
     },
-    removeRemoteFilesystem: function(filesystem) {
-      this.remoteFilesystems = this.remoteFilesystems.filter(fs => fs.id !== filesystem.id);
+    removePeer: function(peer) {
+      this.peers = this.peers.filter(p => p.id !== peer.id);
     }
   }
 });

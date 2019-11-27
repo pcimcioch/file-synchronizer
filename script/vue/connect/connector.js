@@ -30,7 +30,8 @@ Vue.component('connector', {
   watch: {
     connected: function(newValue) {
       if (newValue) {
-        this.$emit('new-connection', this.connection);
+        const id = uuid4();
+        this.$emit('new-connection', id, id, this.connection);
         this.connection = null;
         this.state = 'Waiting';
         this.otherSdp = null;
