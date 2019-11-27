@@ -1,7 +1,7 @@
 new Vue({
   el: '#app',
   data: {
-    localFilesystem: new LocalFilesystem(),
+    localFilesystem: new LocalFilesystem(), // TODO another abstraction: peer. With optional remoteFilesystem configured. Remove id from remote filesystem and move it to peer
     remoteFilesystems: []
   },
   methods: {

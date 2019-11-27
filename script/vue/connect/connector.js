@@ -1,4 +1,5 @@
 // TODO: make it beautiful
+// TODO: use firedb / firebase to exchange peers data
 Vue.component('connector', {
   data: function() {
     return {

@@ -125,4 +125,6 @@ class RemoteFilesystem {
       }
     });
   }
+
+  // TODO can vue watch delegate properties? Then 'connection' could be private and oly state would be exposed
 }
