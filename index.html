@@ -20,12 +20,9 @@
     <div class="row pt-3" id="app">
         <div class="col offset-1 col-7">
             <filesystem class="mb-2" v-bind:filesystem="localFilesystem"></filesystem>
-            <filesystem class="mb-2" v-bind:filesystem="peer.filesystem" v-for="peer in peers" v-bind:key="peer.id" v-if="peer.filesystem"></filesystem>
+            <filesystem class="mb-2" v-bind:filesystem="peer.filesystem" v-for="peer in network.peers" v-bind:key="peer.id" v-if="peer.filesystem"></filesystem>
         </div>
-        <div class="col col-3">
-            <connector class="mb-2" v-on:new-connection="addPeer"></connector>
-            <connections class="mb-2" v-bind:peers="peers" v-on:remove="removePeer"></connections>
-        </div>
+        <connection-manager class="col col-3" v-bind:network="network" v-bind:remote-calls-handler="remoteCallsHandler"></connection-manager>
     </div>
 </body>
 

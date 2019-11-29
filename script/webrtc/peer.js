@@ -1,4 +1,3 @@
-import {RemoteCallsHandler} from './remote-calls-handler.js';
 import {RemoteFilesystem} from './remote-filesystem.js';
 
 export class Peer {
@@ -10,11 +9,6 @@ export class Peer {
   /*** @type {string}*/
   name = '';
 
-  /**
-   * @type {?RemoteCallsHandler}
-   * @private
-   */
-  _remoteCallsHandler = null;
   /**
    * @type {?Connection}
    * @private
@@ -30,15 +24,10 @@ export class Peer {
     this.name = name;
   }
 
-  /**
-   * @param {LocalFilesystem} localFilesystem
-   * @param {Connection} connection
-   */
-  connect(localFilesystem, connection) {
+  /*** @param {Connection} connection*/
+  connect(connection) {
     this._connection = connection;
-    this._remoteCallsHandler = new RemoteCallsHandler(localFilesystem);
     this.filesystem = new RemoteFilesystem(connection);
-    connection.requestHandler = this._remoteCallsHandler;
   }
 
   /*** @returns {?string}*/

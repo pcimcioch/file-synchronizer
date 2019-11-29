@@ -1,5 +1,5 @@
-// TODO: All errors from Connection should be logged here?
-export const connections = {
+// !TODO: All errors from Connection should be logged here?
+export const connectionsList = {
   props: {
     peers: {
       type: Array,

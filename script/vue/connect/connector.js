@@ -1,5 +1,4 @@
-// TODO: make it beautiful
-// TODO: use firedb / firebase to exchange peers data
+// !TODO: make it beautiful
 import {uuid4} from '../../utils/crypto.js';
 import {Connection} from '../../webrtc/connection.js';
 

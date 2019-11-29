@@ -1,29 +1,23 @@
-// TODO add possibility to send file over webrtc
+// !TODO add possibility to send file over webrtc
 import {LocalFilesystem} from '../local/local-filesystem.js';
-import {Peer} from '../webrtc/peer.js';
-import {connections} from './connect/connections.js';
-import {connector} from './connect/connector.js';
+import {Network} from '../webrtc/network.js';
+import {RemoteCallsHandler} from '../webrtc/remote-calls-handler.js';
 import {filesystem} from './filesystem/filesystem.js';
+import {connectionManager} from './connect/connection-manager.js';
 
 new Vue({
   el: '#app',
   data: {
     localFilesystem: new LocalFilesystem(),
-    peers: []
+    network : new Network()
+  },
+  computed: {
+    remoteCallsHandler: function() {
+      return new RemoteCallsHandler(this.localFilesystem);
+    }
   },
   components: {
-    connections: connections,
-    connector: connector,
-    filesystem: filesystem
-  },
-  methods: {
-    addPeer: function(id, name, connection) {
-      const peer = new Peer(id, name);
-      peer.connect(this.localFilesystem, connection);
-      this.peers.push(peer);
-    },
-    removePeer: function(peer) {
-      this.peers = this.peers.filter(p => p.id !== peer.id);
-    }
+    filesystem: filesystem,
+    connectionManager: connectionManager
   }
 });
