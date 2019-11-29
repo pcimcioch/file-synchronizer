@@ -1,5 +1,6 @@
 import {fileInfo} from './file-info.js';
 
+// !TODO component name should be multi-word
 export const store = {
   props: {
     store: {
@@ -57,23 +58,23 @@ export const store = {
   },
   template: `
     <div class="row">
-      <div class="list-group list-group-flush col col-6"  v-bind:style="{'overflow-y': 'scroll', 'max-height': maxHeight}">
-        <button class="list-group-item list-group-item-action p-1" title="Back" v-on:click="back">
+      <div class="list-group list-group-flush col col-6"  :style="{'overflow-y': 'scroll', 'max-height': maxHeight}">
+        <button class="list-group-item list-group-item-action p-1" title="Back" @click="back">
           <span class="fas fa-arrow-left">&nbsp;Back</span>
         </button>
         <button class="list-group-item list-group-item-action p-1" 
                 v-for="file in files" 
-                v-bind:key="file.name"
-                v-bind:class="{active: file === selected}" 
-                v-on:click="select(file)"
-                v-on:dblclick="open(file)">
-          <span v-bind:title="file.name">
-            <i class="far" v-bind:class="file.isFile ? 'fa-file text-info' : 'fa-folder text-warning'"></i>
+                :key="file.name"
+                :class="{active: file === selected}" 
+                @click="select(file)"
+                @dblclick="open(file)">
+          <span :title="file.name">
+            <i class="far" :class="file.isFile ? 'fa-file text-info' : 'fa-folder text-warning'"></i>
             &nbsp;{{ file.name }}
           </span>
         </button>
       </div>
-      <file-info class="col col-6" v-bind:file="selected"></file-info>
+      <file-info class="col col-6" :file="selected"></file-info>
     </div>
   `
 };

@@ -40,7 +40,7 @@ export const fileInfo = {
           <tr v-if="file.isFile">
             <td>MD5 Hash</td>
             <td v-if="file.md5">{{ file.md5 }}</td>
-            <td v-else><button class="btn btn-sm btn-warning pl-1 pr-1 pt-0 pb-0" v-on:click="showHash">Compute</button></td>
+            <td v-else><button class="btn btn-sm btn-warning pl-1 pr-1 pt-0 pb-0" @click="showHash">Compute</button></td>
           </tr>
         </tbody>
       </table>

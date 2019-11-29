@@ -2,7 +2,7 @@
 import {uuid4} from '../../utils/crypto.js';
 import {Connection} from '../../webrtc/connection.js';
 
-export const connector = {
+export const manualConnector = {
   data: function() {
     return {
       connection: null,
@@ -49,14 +49,14 @@ export const connector = {
         </div>
         
         <div class="row" v-if="!connection">
-          <button class="btn btn-primary" v-on:click="startInitiator">Listen</button>
-          <button class="btn btn-success" v-on:click="startSlave"">Connect</button>
+          <button class="btn btn-primary" @click="startInitiator">Listen</button>
+          <button class="btn btn-success" @click="startSlave"">Connect</button>
         </div>
         
         <div class="row" v-else>
-          <textarea disabled v-bind:value="connection.sdp"></textarea>
+          <textarea disabled :value="connection.sdp"></textarea>
           <textarea v-model="otherSdp"></textarea>
-          <button class="btn btn-success" v-on:click="connect" v-bind:disabled="!otherSdp || connected || state === 'Connecting'">Connect</button>
+          <button class="btn btn-success" @click="connect" :disabled="!otherSdp || connected || state === 'Connecting'">Connect</button>
         </div>
       </div>
     </div>

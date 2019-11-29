@@ -14,6 +14,9 @@ new Vue({
   computed: {
     remoteCallsHandler: function() {
       return new RemoteCallsHandler(this.localFilesystem);
+    },
+    connectedPeers: function() {
+      return this.network.peers.filter(p => p.filesystem);
     }
   },
   components: {

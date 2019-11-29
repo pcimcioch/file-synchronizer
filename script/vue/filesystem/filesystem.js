@@ -1,8 +1,9 @@
 import {LocalFilesystem} from '../../local/local-filesystem.js';
 import {RemoteFilesystem} from '../../webrtc/remote-filesystem.js';
-import {storesList} from './stores-list.js';
+import {storeList} from './store-list.js';
 import {store} from './store.js';
 
+// !TODO component name should be multi-word
 export const filesystem = {
   props: {
     filesystem: {
@@ -47,21 +48,21 @@ export const filesystem = {
     setTimeout(() => this.sync(), 500);
   },
   components: {
-    storesList: storesList,
+    storeList: storeList,
     store: store
   },
   template: `
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">{{ remote ? 'Remote Filesystem' : 'Local Filesystem' }}</h5>
-        <stores-list v-bind:stores="filesystem.stores" 
-                     v-on:add="addStore" 
-                     v-on:remove="removeStore" 
-                     v-on:open="open" 
-                     v-on:sync="sync"
-                     v-bind:remote="remote"
-                     v-if="!opened"></stores-list>
-        <store v-bind:store="opened" v-on:close="close" v-if="opened"></store>
+        <store-list :stores="filesystem.stores" 
+                     :remote="remote"
+                     @add="addStore" 
+                     @remove="removeStore" 
+                     @open="open" 
+                     @sync="sync"
+                     v-if="!opened"></store-list>
+        <store :store="opened" @close="close" v-if="opened"></store>
       </div>
     </div>
   `
