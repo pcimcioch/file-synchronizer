@@ -5,22 +5,30 @@ import {store} from './store.js';
 
 // !TODO component name should be multi-word
 export const filesystem = {
+  components: {
+    storeList: storeList,
+    store: store
+  },
+
   props: {
     filesystem: {
       type: Object,
       required: true
     }
   },
+
   data: function() {
     return {
       opened: null
     }
   },
+
   computed: {
     remote: function() {
       return this.filesystem instanceof RemoteFilesystem;
     }
   },
+
   methods: {
     open: function(handler) {
       this.opened = handler;
@@ -44,13 +52,11 @@ export const filesystem = {
       }
     }
   },
+
   mounted: function() {
     setTimeout(() => this.sync(), 500);
   },
-  components: {
-    storeList: storeList,
-    store: store
-  },
+
   template: `
     <div class="card">
       <div class="card-body">
@@ -61,8 +67,8 @@ export const filesystem = {
                      @remove="removeStore" 
                      @open="open" 
                      @sync="sync"
-                     v-if="!opened"></store-list>
-        <store :store="opened" @close="close" v-if="opened"></store>
+                     v-if="!opened" />
+        <store :store="opened" @close="close" v-if="opened" />
       </div>
     </div>
   `

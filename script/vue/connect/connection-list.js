@@ -6,6 +6,7 @@ export const connectionList = {
       required: true
     }
   },
+
   methods: {
     disconnect: function(peer) {
       if (peer.state !== 'closed') {
@@ -18,6 +19,7 @@ export const connectionList = {
       }
     }
   },
+
   template: `
     <div class="card">
      <div class="card-body">

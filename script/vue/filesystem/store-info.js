@@ -5,6 +5,7 @@ export const storeInfo = {
       required: false
     }
   },
+
   template: `
     <table class="table table-borderless table-sm" v-if="store">
       <tbody>

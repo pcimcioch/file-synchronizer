@@ -10,11 +10,25 @@ export const manualConnector = {
       state: 'Waiting'
     };
   },
+
   computed: {
     connected: function() {
       return this.connection && this.connection.state === 'connected';
     }
   },
+
+  watch: {
+    connected: function(newValue) {
+      if (newValue) {
+        const id = uuid4();
+        this.$emit('new-connection', id, id, this.connection);
+        this.connection = null;
+        this.state = 'Waiting';
+        this.otherSdp = null;
+      }
+    }
+  },
+
   methods: {
     startInitiator: function() {
       this.connection = new Connection(true);
@@ -29,31 +43,21 @@ export const manualConnector = {
       this.state = 'Connecting';
     }
   },
-  watch: {
-    connected: function(newValue) {
-      if (newValue) {
-        const id = uuid4();
-        this.$emit('new-connection', id, id, this.connection);
-        this.connection = null;
-        this.state = 'Waiting';
-        this.otherSdp = null;
-      }
-    }
-  },
+
   template: `
     <div class="card">
       <div class="card-body">
       <div class="row">
-          <span v-if="connected">State: Connected!</span>
-          <span v-else>State: {{ state }}</span>
+          <span v-if="connected" key="state-connected">State: Connected!</span>
+          <span v-else key="state-not-connected">State: {{ state }}</span>
         </div>
         
-        <div class="row" v-if="!connection">
+        <div class="row" v-if="!connection" key="not-yet-connected">
           <button class="btn btn-primary" @click="startInitiator">Listen</button>
           <button class="btn btn-success" @click="startSlave"">Connect</button>
         </div>
         
-        <div class="row" v-else>
+        <div class="row" v-else key="during-connect">
           <textarea disabled :value="connection.sdp"></textarea>
           <textarea v-model="otherSdp"></textarea>
           <button class="btn btn-success" @click="connect" :disabled="!otherSdp || connected || state === 'Connecting'">Connect</button>

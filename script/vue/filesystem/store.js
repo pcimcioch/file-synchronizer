@@ -2,6 +2,10 @@ import {fileInfo} from './file-info.js';
 
 // !TODO component name should be multi-word
 export const store = {
+  components: {
+    fileInfo: fileInfo
+  },
+
   props: {
     store: {
       type: Object,
@@ -13,6 +17,7 @@ export const store = {
       default: '200px'
     }
   },
+
   data: function() {
     return {
       selected: null,
@@ -20,6 +25,17 @@ export const store = {
       path: []
     };
   },
+
+  watch: {
+    handler: function(newValue) {
+      this.listDirectory([newValue.fileHandle]);
+    }
+  },
+
+  mounted: function() {
+    this.listDirectory([this.store.fileHandle]);
+  },
+
   methods: {
     select: function(file) {
       this.selected = file;
@@ -45,17 +61,7 @@ export const store = {
       }
     }
   },
-  mounted: function() {
-    this.listDirectory([this.store.fileHandle]);
-  },
-  watch: {
-    handler: function(newValue) {
-      this.listDirectory([newValue.fileHandle]);
-    }
-  },
-  components: {
-    fileInfo: fileInfo
-  },
+
   template: `
     <div class="row">
       <div class="list-group list-group-flush col col-6"  :style="{'overflow-y': 'scroll', 'max-height': maxHeight}">
@@ -74,7 +80,7 @@ export const store = {
           </span>
         </button>
       </div>
-      <file-info class="col col-6" :file="selected"></file-info>
+      <file-info class="col col-6" :file="selected" />
     </div>
   `
 };

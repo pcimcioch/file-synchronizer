@@ -1,6 +1,10 @@
 import {storeInfo} from './store-info.js';
 
 export const storeList = {
+  components: {
+    storeInfo: storeInfo
+  },
+
   props: {
     stores: {
       type: Array,
@@ -17,11 +21,13 @@ export const storeList = {
       default: '200px'
     }
   },
+
   data: function() {
     return {
       selected: null
     };
   },
+
   methods: {
     select: function(entry) {
       this.selected = entry;
@@ -43,9 +49,7 @@ export const storeList = {
       this.$emit('sync');
     }
   },
-  components: {
-    storeInfo: storeInfo
-  },
+
   template: `
     <div class="row">
       <div class="col col-6">
@@ -65,7 +69,7 @@ export const storeList = {
           </button>
         </div>
       </div>
-      <store-info class="col col-6" :store="selected"></store-info>
+      <store-info class="col col-6" :store="selected" />
     </div>
   `
 };
