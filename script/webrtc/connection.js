@@ -14,7 +14,7 @@ class DefaultErrorHandler {
 
 export class Connection {
 
-  /*** @type {?string}*/
+  /*** @type {?Object}*/
   sdp = null;
   /*** @type {string} One of: starting, signaled, connected, closed*/
   state = 'starting';
@@ -38,7 +38,7 @@ export class Connection {
 
     this._peer.on('error', err => this.errorHandler.handle('Peer error: ' + err));
     this._peer.on('signal', data => {
-      this.sdp = JSON.stringify(data);
+      this.sdp = data;
       this.state = 'signaled';
     });
     this._peer.on('connect', () => this.state = 'connected');
@@ -46,12 +46,12 @@ export class Connection {
     this._peer.on('close', () => this.state = 'closed');
   }
 
-  /*** @param {string} sdp*/
+  /*** @param {Object} sdp*/
   connect(sdp) {
     if (this.state === 'connected') throw 'Connection already established';
     if (this.state === 'closed') throw 'Connection already closed';
 
-    this._peer.signal(JSON.parse(sdp));
+    this._peer.signal(sdp);
   }
 
   _handleData(data) {
@@ -132,7 +132,7 @@ export class Connection {
   }
 
   close() {
-    if (this.state === 'closed') throw 'Connection already closed';
+    if (this.state === 'closed') return;
 
     this._peer.destroy();
   }

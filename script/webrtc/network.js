@@ -11,6 +11,7 @@ export class Network {
    * @param {?Connection} connection
    */
   addPeer(id, name, connection) {
+    // !TODO override if peer with id exists
     const peer = new Peer(id, name);
     if (connection) peer.connect(connection);
 
