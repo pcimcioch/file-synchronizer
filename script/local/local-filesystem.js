@@ -114,15 +114,17 @@ class LocalFile {
     return await LocalFile.build(file);
   }
 
-  // !TODO progress bar
-  /*** @returns {Promise<string>}*/
-  async computeMd5() {
+  /**
+   * @param {Function} [progressCallback]
+   * @returns {Promise<string>}
+   */
+  async computeMd5(progressCallback) {
     if (!this.isFile) {
       throw new Error('Cannot compute md5 on non-file files');
     }
 
     if (!this.md5) {
-      this.md5 = await getMD5(this._file);
+      this.md5 = await getMD5(this._file, progressCallback);
     }
     return this.md5;
   }

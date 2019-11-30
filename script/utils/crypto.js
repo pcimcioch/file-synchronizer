@@ -19,16 +19,24 @@ function byteArrayToWordArray(ba) {
 
 /**
  * @param {Blob} file
+ * @param {Function} [progressCallback]
  * @returns {Promise<string>}
  */
-export function getMD5(file) {
+export function getMD5(file, progressCallback) {
   const md5 = CryptoJS.algo.MD5.create();
   const writableStream = new WritableStream({
     iteration: 0,
+    processed: 0,
+    total: file.size,
 
     async write(chunk) {
       md5.update(byteArrayToWordArray(chunk));
-      if (this.iteration++ % 100 === 0) await sleep(1);
+      this.iteration++;
+      this.processed += chunk.length;
+      if (this.iteration % 128 === 0) {
+        if (progressCallback && this.iteration % 512 === 0) progressCallback({processed: this.processed, total: this.total});
+        await sleep(1);
+      }
     }
   });
 

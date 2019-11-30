@@ -14,13 +14,20 @@ export default {
     }
   },
 
+  data: function() {
+    return {
+      progress: 0
+    };
+  },
+
   methods: {
     showHash: async function() {
       if (!this.file || !this.file.isFile) {
         return;
       }
+      this.progress = 0;
 
-      await this.file.computeMd5();
+      await this.file.computeMd5(progress => this.progress = Math.floor(progress.processed * 100 / progress.total));
     }
   },
 
@@ -42,8 +49,13 @@ export default {
           </tr>
           <tr v-if="file.isFile">
             <td>MD5 Hash</td>
-            <td v-if="file.md5" key="md5-available">{{ file.md5 }}</td>
-            <td v-else key="md5-missing"><button class="btn btn-sm btn-warning pl-1 pr-1 pt-0 pb-0" @click="showHash">Compute</button></td>
+            <td v-if="file.md5">{{ file.md5 }}</td>
+            <td v-if="!file.md5 && !progress"><button class="btn btn-sm btn-warning pl-1 pr-1 pt-0 pb-0" @click="showHash">Compute</button></td>
+            <td v-if="!file.md5 && progress">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" :style="{'width': progress + '%'}"></div>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
