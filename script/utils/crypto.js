@@ -19,7 +19,7 @@ function byteArrayToWordArray(ba) {
 
 /**
  * @param {Blob} file
- * @param {Function} [progressCallback]
+ * @param {?Function} [progressCallback]
  * @returns {Promise<string>}
  */
 export function getMD5(file, progressCallback) {

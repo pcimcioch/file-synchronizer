@@ -67,24 +67,38 @@ export class Connection {
 
   _handleResponse(response) {
     const requestId = response.rid;
-    const promise = this._requests[requestId];
-    delete this._requests[requestId];
-    if (!promise) {
+    const partial = response.p;
+    const request = this._requests[requestId];
+    if (!request) {
       this.errorHandler.handle('Got response to unknown request: ' + requestId);
       return;
     }
 
-    clearTimeout(promise.time);
+    if (partial) {
+      if (request.partialResultHandler) request.partialResultHandler(response.r);
+      return;
+    }
+
+    delete this._requests[requestId];
+    clearTimeout(request.time);
+
     if (response.e) {
-      promise.reject(response.e);
+      request.reject(response.e);
     } else {
-      promise.resolve(response.r);
+      request.resolve(response.r);
     }
   }
 
   _handleRequest(request) {
     const requestId = request.rid;
-    this.requestHandler.handle(request.r).then(response => this._sendJson({
+    const partialResultCallback = !request.p ? null : partialResponse => this._sendJson({
+      t: 'rs',
+      rid: requestId,
+      r: partialResponse,
+      p: true
+    });
+
+    this.requestHandler.handle(request.r, partialResultCallback).then(response => this._sendJson({
       t: 'rs',
       rid: requestId,
       r: response
@@ -100,19 +114,20 @@ export class Connection {
   }
 
   _timeout(requestId) {
-    const promise = this._requests[requestId];
+    const request = this._requests[requestId];
     delete this._requests[requestId];
-    if (promise) {
-      promise.reject('Timeout');
+    if (request) {
+      request.reject('Timeout');
     }
   }
 
   /**
    * @param {Object} request
    * @param {number} [timeout=5000]
+   * @param {Function} [partialResultHandler]
    * @returns {Promise<Object>}
    */
-  sendRequest(request, timeout = 5000) {
+  sendRequest(request, timeout = 5000, partialResultHandler) {
     if (this.state === 'starting' || this.state === 'signaled') throw 'Connection not yet established';
     if (this.state === 'closed') throw 'Connection already closed';
 
@@ -122,12 +137,14 @@ export class Connection {
       this._requests[requestId] = {
         resolve: resolve,
         reject: reject,
-        timeout: timeoutHandle
+        timeout: timeoutHandle,
+        partialResultHandler: partialResultHandler
       };
       this._sendJson({
         t: 'rq',
         rid: requestId,
-        r: request
+        r: request,
+        p: !!partialResultHandler
       })
     });
   }

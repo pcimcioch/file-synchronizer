@@ -115,7 +115,7 @@ class LocalFile {
   }
 
   /**
-   * @param {Function} [progressCallback]
+   * @param {?Function} [progressCallback]
    * @returns {Promise<string>}
    */
   async computeMd5(progressCallback) {

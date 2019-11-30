@@ -78,16 +78,18 @@ class RemoteFile {
     return response.entries.map(entry => RemoteFile.fromObject(entry, this._path.concat(this.name), this._connection, this._storeId));
   }
 
-  // !TODO progress bar
   // !TODO timeout depends on file size?
-  /*** @returns {Promise<string>}*/
-  async computeMd5() {
+  /**
+   * @param {?Function} [progressCallback]
+   * @returns {Promise<string>}
+   */
+  async computeMd5(progressCallback) {
     if (!this.md5) {
       const response = await this._connection.sendRequest({
         type: 'get-md5',
         storeId: this._storeId,
         path: this._path.concat(this.name)
-      }, 300000);
+      }, 300000, progressCallback);
       this.md5 = response.md5;
     }
 

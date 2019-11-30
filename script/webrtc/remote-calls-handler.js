@@ -13,16 +13,17 @@ export class RemoteCallsHandler {
 
   /**
    * @param {Object} request
+   * @param {?Function} partialResponseCallback
    * @returns {Promise<Object>}
    */
-  handle(request) {
+  handle(request, partialResponseCallback) {
     switch (request.type) {
       case 'list-stores':
         return this._listStores();
       case 'get-entries':
         return this._getEntries(request.storeId, request.path);
       case 'get-md5':
-        return this._getMd5(request.storeId, request.path);
+        return this._getMd5(request.storeId, request.path, partialResponseCallback);
       default:
         return this._error(request.type);
     }
@@ -68,15 +69,16 @@ export class RemoteCallsHandler {
   /**
    * @param {string} storeId
    * @param {string[]} path
+   * @param {?Function} partialResponseCallback
    * @returns {Promise<{md5: *}>}
    * @private
    */
-  async _getMd5(storeId, path) {
+  async _getMd5(storeId, path, partialResponseCallback) {
     const fileHandle = await this._getDirectory(storeId, path.slice(0, path.length - 1));
 
     try {
       const file = await fileHandle.getFile(path[path.length - 1]);
-      const md5 = await file.computeMd5();
+      const md5 = await file.computeMd5(partialResponseCallback);
       return {
         md5: md5
       };
