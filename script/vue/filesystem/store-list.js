@@ -1,8 +1,8 @@
-import {storeInfo} from './store-info.js';
+import StoreInfo from './store-info.js';
 
-export const storeList = {
+export default {
   components: {
-    storeInfo: storeInfo
+    StoreInfo: StoreInfo
   },
 
   props: {

@@ -1,9 +1,8 @@
-import {fileInfo} from './file-info.js';
+import FileInfo from './file-info.js';
 
-// !TODO component name should be multi-word
-export const store = {
+export default {
   components: {
-    fileInfo: fileInfo
+    FileInfo: FileInfo
   },
 
   props: {

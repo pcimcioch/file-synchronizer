@@ -1,7 +1,7 @@
 import {bytes, date} from '../filters.js';
 
 // !TODO make proper class hierarchy so it can be used in props.type
-export const fileInfo = {
+export default {
   filters: {
     bytes: bytes,
     date: date

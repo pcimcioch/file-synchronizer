@@ -1,13 +1,12 @@
 import {LocalFilesystem} from '../../local/local-filesystem.js';
 import {RemoteFilesystem} from '../../webrtc/remote-filesystem.js';
-import {storeList} from './store-list.js';
-import {store} from './store.js';
+import StoreList from './store-list.js';
+import StoreView from './store-view.js';
 
-// !TODO component name should be multi-word
-export const filesystem = {
+export default {
   components: {
-    storeList: storeList,
-    store: store
+    StoreList: StoreList,
+    StoreView: StoreView
   },
 
   props: {
@@ -68,7 +67,7 @@ export const filesystem = {
                      @open="open" 
                      @sync="sync"
                      v-if="!opened" />
-        <store :store="opened" @close="close" v-if="opened" />
+        <store-view :store="opened" @close="close" v-if="opened" />
       </div>
     </div>
   `

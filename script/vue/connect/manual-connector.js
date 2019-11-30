@@ -2,7 +2,7 @@
 import {uuid4} from '../../utils/crypto.js';
 import {Connection} from '../../webrtc/connection.js';
 
-export const manualConnector = {
+export default {
   data: function() {
     return {
       connection: null,

@@ -1,13 +1,13 @@
 import {Network} from '../../webrtc/network.js';
 import {RemoteCallsHandler} from '../../webrtc/remote-calls-handler.js';
-import {manualConnector} from './manual-connector.js';
-import {connectionList} from './connection-list.js';
+import ManualConnector from './manual-connector.js';
+import ConnectionList from './connection-list.js';
 
 // !TODO: use firedb / firebase to exchange peers data
-export const connectionManager = {
+export default {
   components: {
-    manualConnector: manualConnector,
-    connectionList: connectionList
+    ManualConnector: ManualConnector,
+    ConnectionList: ConnectionList
   },
 
   props: {

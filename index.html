@@ -19,8 +19,8 @@
 <body>
     <div class="row pt-3" id="app">
         <div class="col offset-1 col-7">
-            <filesystem class="mb-2" :filesystem="localFilesystem"></filesystem>
-            <filesystem class="mb-2" :filesystem="peer.filesystem" v-for="peer in connectedPeers" :key="peer.id" v-if="peer.filesystem"></filesystem>
+            <filesystem-view class="mb-2" :filesystem="localFilesystem"></filesystem-view>
+            <filesystem-view class="mb-2" :filesystem="peer.filesystem" v-for="peer in connectedPeers" :key="peer.id" v-if="peer.filesystem"></filesystem-view>
         </div>
         <connection-manager class="col col-3" :network="network" :remote-calls-handler="remoteCallsHandler"></connection-manager>
     </div>

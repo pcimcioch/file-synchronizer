@@ -1,4 +1,4 @@
-export const storeInfo = {
+export default {
   props: {
     store: {
       type: Object,
