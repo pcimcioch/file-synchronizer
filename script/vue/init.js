@@ -1,5 +1,4 @@
 // !TODO add possibility to send file over webrtc
-// !TODO push to github
 import {LocalFilesystem} from '../local/local-filesystem.js';
 import {Network} from '../webrtc/network.js';
 import {RemoteCallsHandler} from '../webrtc/remote-calls-handler.js';
