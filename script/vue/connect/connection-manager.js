@@ -31,6 +31,7 @@ export default {
   methods: {
     addPeer: function(id, name, connection) {
       connection.requestHandler = this.remoteCallsHandler;
+      this.network.removePeer(id);
       this.network.addPeer(id, name, connection);
     },
     removePeer: function(peer) {

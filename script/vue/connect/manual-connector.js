@@ -40,6 +40,9 @@ export default {
       } catch (e) {
         return null;
       }
+    },
+    isInvalidClass: function() {
+      return {'is-invalid': (this.otherDescriptor && !this.otherDescriptorObject)};
     }
   },
 
@@ -89,11 +92,12 @@ export default {
           </div>
           
           <template v-if="connection && initiator">
-            <div class="form-group">
-              <textarea class="form-control" rows="4" disabled :value="connectionDescriptor"></textarea>
+            <div class="form-group textarea-container">
+              <textarea class="form-control" rows="4" readonly :value="connectionDescriptor"></textarea>
+              <button class="btn btn-sm btn-secondary btn-clipboard far fa-copy" :data-clipboard-text="connectionDescriptor" title="Copy to clipboard"></button>
             </div>
             <div class="form-group">
-              <textarea class="form-control" rows="4" v-model="otherDescriptor" :class="{'is-invalid': (otherDescriptor && !otherDescriptorObject)}"></textarea>
+              <textarea class="form-control" rows="4" v-model="otherDescriptor" :class="isInvalidClass"></textarea>
               <div class="invalid-feedback">Must be json with 'id', 'name' and 'sdp' fields</div>
             </div>
             <div class="form-group">
@@ -104,15 +108,16 @@ export default {
           
           <template v-if="connection &&!initiator">
             <div class="form-group" v-if="!connectionDescriptor">
-              <textarea class="form-control" rows="4" v-model="otherDescriptor" :class="{'is-invalid': (otherDescriptor && !otherDescriptorObject)}"></textarea>
+              <textarea class="form-control" rows="4" v-model="otherDescriptor" :class="isInvalidClass"></textarea>
               <div class="invalid-feedback">Must be json with 'id', 'name' and 'sdp' fields</div>
             </div>
             <div class="form-group" v-if="!connectionDescriptor">
               <button class="btn btn-sm btn-outline-warning" @click="cancel">Cancel</button>
               <button class="btn btn-sm btn-success float-right" @click="connect" :disabled="!otherDescriptorObject">Submit</button>
             </div>
-            <div class="form-group" v-if="connectionDescriptor">
-              <textarea class="form-control" rows="4" disabled :value="connectionDescriptor"></textarea>
+            <div class="form-group textarea-container" v-if="connectionDescriptor">
+              <textarea class="form-control" rows="4" readonly :value="connectionDescriptor"></textarea>
+              <button class="btn btn-sm btn-secondary btn-clipboard far fa-copy" :data-clipboard-text="connectionDescriptor" title="Copy to clipboard"></button>
             </div>
             <div class="form-group" v-if="connectionDescriptor">
               <button class="btn btn-sm btn-outline-warning" @click="cancel">Cancel</button>

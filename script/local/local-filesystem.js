@@ -114,7 +114,7 @@ class LocalFile {
     return await LocalFile.build(file);
   }
 
-  // !TODO resolve long md5 compute problem
+  // !TODO progress bar
   /*** @returns {Promise<string>}*/
   async computeMd5() {
     if (!this.isFile) {

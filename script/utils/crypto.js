@@ -1,3 +1,7 @@
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 /**
  * @param {Uint8Array} ba
  * @returns {WordArray}
@@ -20,8 +24,11 @@ function byteArrayToWordArray(ba) {
 export function getMD5(file) {
   const md5 = CryptoJS.algo.MD5.create();
   const writableStream = new WritableStream({
-    write(chunk) {
+    iteration: 0,
+
+    async write(chunk) {
       md5.update(byteArrayToWordArray(chunk));
+      if (this.iteration++ % 100 === 0) await sleep(1);
     }
   });
 

@@ -8,18 +8,17 @@ export class Network {
   /**
    * @param {string} id
    * @param {string} name
-   * @param {?Connection} connection
+   * @param {Connection} [connection]
    */
   addPeer(id, name, connection) {
-    // !TODO override if peer with id exists
-    const peer = new Peer(id, name);
-    if (connection) peer.connect(connection);
-
-    this.peers.push(peer);
+    const newPeer = new Peer(id, name);
+    if (connection) newPeer.connect(connection);
+    this.peers.push(newPeer);
   }
 
   /*** @param {string} peerId*/
   removePeer(peerId) {
+    this.peers.filter(p => p.id === peerId).forEach(p => p.close());
     this.peers = this.peers.filter(p => p.id !== peerId);
   }
 }

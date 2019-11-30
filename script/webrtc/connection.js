@@ -109,19 +109,20 @@ export class Connection {
 
   /**
    * @param {Object} request
+   * @param {number} [timeout=5000]
    * @returns {Promise<Object>}
    */
-  sendRequest(request) {
+  sendRequest(request, timeout = 5000) {
     if (this.state === 'starting' || this.state === 'signaled') throw 'Connection not yet established';
     if (this.state === 'closed') throw 'Connection already closed';
 
     return new Promise((resolve, reject) => {
       const requestId = uuid4();
-      const timeout = setTimeout(() => this._timeout(requestId), 5000);
+      const timeoutHandle = setTimeout(() => this._timeout(requestId), timeout);
       this._requests[requestId] = {
         resolve: resolve,
         reject: reject,
-        timeout: timeout
+        timeout: timeoutHandle
       };
       this._sendJson({
         t: 'rq',

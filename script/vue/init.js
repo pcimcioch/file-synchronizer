@@ -6,6 +6,8 @@ import {RemoteCallsHandler} from '../webrtc/remote-calls-handler.js';
 import FilesystemView from './filesystem/filesystem-view.js';
 import ConnectionManager from './connect/connection-manager.js';
 
+new ClipboardJS('.btn-clipboard');
+
 new Vue({
   el: '#app',
 
