@@ -8,13 +8,18 @@ export default {
   },
 
   methods: {
+    connect: function(peer) {
+      if (peer.visible && (!peer.state || peer.state === 'closed')) {
+        this.$emit('init', peer);
+      }
+    },
     disconnect: function(peer) {
-      if (peer.state !== 'closed') {
+      if (peer.state && peer.state !== 'closed') {
         peer.close();
       }
     },
     remove: function(peer) {
-      if (peer.state === 'closed') {
+      if (!peer.visible && peer.state === 'closed') {
         this.$emit('remove', peer);
       }
     }
@@ -31,13 +36,17 @@ export default {
              :class="{'bg-light-danger' : (peer.state === 'closed')}">
            {{ peer.name }}
            <div class="btn-group float-right">
+             <button class="btn btn-xs btn-success fas fa-link pt-1 pb-1 pl-2 pr-2" title="Connect"
+                     @click="connect(peer)"
+                     :disabled="!peer.visible || (peer.state && peer.state !== 'closed')">
+             </button>
              <button class="btn btn-xs btn-warning fas fa-unlink pt-1 pb-1 pl-2 pr-2" title="Disconnect"
                      @click="disconnect(peer)"
-                     :disabled="peer.state === 'closed'">
+                     :disabled="!peer.state || peer.state === 'closed'">
              </button>
              <button class="btn btn-xs btn-danger fas fa-minus pt-1 pb-1 pl-2 pr-2" title="Remove Connection"
                      @click="remove(peer)"
-                     :disabled="peer.state !== 'closed'">
+                     :disabled="peer.visible || peer.state !== 'closed'">
              </button>
            </div>
          </li>

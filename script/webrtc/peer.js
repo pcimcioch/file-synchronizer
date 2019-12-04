@@ -8,6 +8,8 @@ export class Peer {
   id = '';
   /*** @type {string}*/
   name = '';
+  /*** @type {boolean}*/
+  visible = false;
 
   /**
    * @type {?Connection}
@@ -18,10 +20,12 @@ export class Peer {
   /**
    * @param {string} id
    * @param {string} name
+   * @param {boolean} visible
    */
-  constructor(id, name) {
+  constructor(id, name, visible) {
     this.id = id;
     this.name = name;
+    this.visible = visible;
   }
 
   /*** @param {Connection} connection*/
